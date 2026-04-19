@@ -107,22 +107,27 @@ pub async fn ai_chat(_state: State<'_, AppState>, _message: String) -> Result<St
 }
 
 #[tauri::command]
-pub async fn ai_list_models(
+pub fn ai_list_models(
     state: State<'_, AppState>,
-) -> Result<Vec<feverthoth_providers::ModelInfo>, String> {
+) -> Vec<feverthoth_providers::ModelInfo> {
     let providers = state.providers.read();
-    let models = providers.all_models().await;
-    Ok(models)
+    tokio::task::block_in_place(|| {
+        tokio::runtime::Handle::current().block_on(providers.all_models())
+    })
 }
 
 #[tauri::command]
-pub async fn ai_check_ollama(state: State<'_, AppState>) -> Result<bool, String> {
+pub fn ai_check_ollama(state: State<'_, AppState>) -> bool {
     let providers = state.providers.read();
-    if let Some(provider) = providers.get(&feverthoth_providers::ProviderId("ollama".to_string())) {
-        Ok(provider.is_available().await)
-    } else {
-        Ok(false)
-    }
+    tokio::task::block_in_place(|| {
+        tokio::runtime::Handle::current().block_on(async {
+            if let Some(provider) = providers.get(&feverthoth_providers::ProviderId("ollama".to_string())) {
+                provider.is_available().await
+            } else {
+                false
+            }
+        })
+    })
 }
 
 #[tauri::command]
