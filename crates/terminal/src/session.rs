@@ -22,7 +22,7 @@ impl TerminalSession {
     pub async fn spawn(cwd: &std::path::Path, shell: Option<&str>) -> anyhow::Result<Self> {
         let shell = shell
             .map(String::from)
-            .unwrap_or_else(|| crate::shell::detect_shell());
+            .unwrap_or_else(crate::shell::detect_shell);
 
         let id = Uuid::new_v4().to_string();
 

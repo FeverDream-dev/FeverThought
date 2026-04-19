@@ -1,5 +1,5 @@
-pub mod ollama;
 pub mod cloud;
+pub mod ollama;
 pub mod registry;
 
 use serde::{Deserialize, Serialize};
@@ -131,6 +131,13 @@ pub trait AiProvider: Send + Sync {
     async fn is_available(&self) -> bool;
     async fn list_models(&self) -> anyhow::Result<Vec<ModelInfo>>;
     async fn chat(&self, request: ChatRequest) -> anyhow::Result<ChatResponse>;
-    async fn chat_stream(&self, request: ChatRequest) -> anyhow::Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>>;
-    async fn analyze_screenshot(&self, image_bytes: &[u8], prompt: &str) -> anyhow::Result<ScreenshotAnalysis>;
+    async fn chat_stream(
+        &self,
+        request: ChatRequest,
+    ) -> anyhow::Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>>;
+    async fn analyze_screenshot(
+        &self,
+        image_bytes: &[u8],
+        prompt: &str,
+    ) -> anyhow::Result<ScreenshotAnalysis>;
 }

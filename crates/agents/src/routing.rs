@@ -91,7 +91,12 @@ impl ModelRouter {
     }
 
     /// Route a task to the best available provider/model.
-    pub fn route(&self, task: &TaskType, needs_vision: bool, needs_tools: bool) -> RoutingDecision {
+    pub fn route(
+        &self,
+        task: &TaskType,
+        needs_vision: bool,
+        _needs_tools: bool,
+    ) -> RoutingDecision {
         // Guardrail: never ignore explicit user/provider pin
         if let (Some(provider), Some(model)) =
             (&self.config.pinned_provider, &self.config.pinned_model)

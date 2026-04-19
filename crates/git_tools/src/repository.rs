@@ -9,7 +9,9 @@ pub struct GitRepository {
 
 impl GitRepository {
     pub async fn open(path: &Path) -> Result<Self> {
-        let repo = Self { path: path.to_path_buf() };
+        let repo = Self {
+            path: path.to_path_buf(),
+        };
         repo.run_git(&["rev-parse", "--git-dir"]).await?;
         Ok(repo)
     }
@@ -57,7 +59,11 @@ impl GitRepository {
             }
         }
 
-        Ok(GitStatus { staged, unstaged, untracked })
+        Ok(GitStatus {
+            staged,
+            unstaged,
+            untracked,
+        })
     }
 
     pub async fn diff(&self, file: Option<&str>) -> Result<String> {
@@ -72,7 +78,7 @@ impl GitRepository {
     pub async fn commit(&self, message: &str, files: &[&str]) -> Result<()> {
         if !files.is_empty() {
             let mut add_args = vec!["add", "--"];
-            add_args.extend(files.iter().map(|s| *s));
+            add_args.extend(files.iter().copied());
             self.run_git(&add_args).await?;
         }
         self.run_git(&["commit", "-m", message]).await?;
@@ -102,7 +108,7 @@ impl GitRepository {
                     is_current: false,
                     is_remote: true,
                 });
-            } else if name != "" {
+            } else if !name.is_empty() {
                 branches.push(BranchInfo {
                     name: name.to_string(),
                     is_current,

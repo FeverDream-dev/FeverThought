@@ -43,6 +43,12 @@ pub struct McpManager {
     providers: HashMap<String, McpProviderConfig>,
 }
 
+impl Default for McpManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl McpManager {
     pub fn new() -> Self {
         let mut providers = HashMap::new();

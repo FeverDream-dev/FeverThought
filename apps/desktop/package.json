@@ -10,7 +10,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "echo 'no tests yet'"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",

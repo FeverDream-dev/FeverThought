@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -24,6 +23,12 @@ pub struct FileEntry {
 pub struct WorkspaceManager {
     current: Option<Workspace>,
     recent: Vec<Workspace>,
+}
+
+impl Default for WorkspaceManager {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl WorkspaceManager {

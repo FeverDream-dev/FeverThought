@@ -1,10 +1,16 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use crate::{AiProvider, ProviderId, ModelInfo};
+use crate::{AiProvider, ModelInfo, ProviderId};
 
 pub struct ProviderRegistry {
     providers: HashMap<ProviderId, Arc<dyn AiProvider>>,
+}
+
+impl Default for ProviderRegistry {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl ProviderRegistry {

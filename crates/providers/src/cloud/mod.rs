@@ -1,13 +1,15 @@
+use crate::{
+    AiProvider, ChatRequest, ChatResponse, ModelCapabilities, ModelId, ModelInfo, ProviderId,
+    ScreenshotAnalysis,
+};
 use anyhow::Result;
 use async_trait::async_trait;
-use crate::{
-    AiProvider, ChatRequest, ChatResponse, ModelCapabilities, ModelId, ModelInfo,
-    ProviderId, ScreenshotAnalysis,
-};
 
 pub struct OpenAiProvider {
     api_key: String,
+    #[allow(dead_code)]
     base_url: String,
+    #[allow(dead_code)]
     model: String,
 }
 
@@ -32,7 +34,8 @@ impl OpenAiProvider {
 #[async_trait]
 impl AiProvider for OpenAiProvider {
     fn id(&self) -> &ProviderId {
-        static ID: once_cell::sync::Lazy<ProviderId> = once_cell::sync::Lazy::new(|| ProviderId("openai".to_string()));
+        static ID: once_cell::sync::Lazy<ProviderId> =
+            once_cell::sync::Lazy::new(|| ProviderId("openai".to_string()));
         &ID
     }
 
@@ -87,11 +90,18 @@ impl AiProvider for OpenAiProvider {
         anyhow::bail!("Use chat_stream for OpenAI")
     }
 
-    async fn chat_stream(&self, _request: ChatRequest) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
+    async fn chat_stream(
+        &self,
+        _request: ChatRequest,
+    ) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
         anyhow::bail!("OpenAI streaming not yet implemented")
     }
 
-    async fn analyze_screenshot(&self, _image_bytes: &[u8], _prompt: &str) -> Result<ScreenshotAnalysis> {
+    async fn analyze_screenshot(
+        &self,
+        _image_bytes: &[u8],
+        _prompt: &str,
+    ) -> Result<ScreenshotAnalysis> {
         anyhow::bail!("Use local vision model for screenshot analysis")
     }
 }
@@ -113,7 +123,8 @@ impl GeminiProvider {
 #[async_trait]
 impl AiProvider for GeminiProvider {
     fn id(&self) -> &ProviderId {
-        static ID: once_cell::sync::Lazy<ProviderId> = once_cell::sync::Lazy::new(|| ProviderId("gemini".to_string()));
+        static ID: once_cell::sync::Lazy<ProviderId> =
+            once_cell::sync::Lazy::new(|| ProviderId("gemini".to_string()));
         &ID
     }
 
@@ -151,11 +162,18 @@ impl AiProvider for GeminiProvider {
         anyhow::bail!("Use chat_stream for Gemini")
     }
 
-    async fn chat_stream(&self, _request: ChatRequest) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
+    async fn chat_stream(
+        &self,
+        _request: ChatRequest,
+    ) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
         anyhow::bail!("Gemini streaming not yet implemented")
     }
 
-    async fn analyze_screenshot(&self, _image_bytes: &[u8], _prompt: &str) -> Result<ScreenshotAnalysis> {
+    async fn analyze_screenshot(
+        &self,
+        _image_bytes: &[u8],
+        _prompt: &str,
+    ) -> Result<ScreenshotAnalysis> {
         anyhow::bail!("Use local vision model for screenshot analysis")
     }
 }
@@ -177,7 +195,8 @@ impl OpenRouterProvider {
 #[async_trait]
 impl AiProvider for OpenRouterProvider {
     fn id(&self) -> &ProviderId {
-        static ID: once_cell::sync::Lazy<ProviderId> = once_cell::sync::Lazy::new(|| ProviderId("openrouter".to_string()));
+        static ID: once_cell::sync::Lazy<ProviderId> =
+            once_cell::sync::Lazy::new(|| ProviderId("openrouter".to_string()));
         &ID
     }
 
@@ -215,11 +234,18 @@ impl AiProvider for OpenRouterProvider {
         anyhow::bail!("Use chat_stream for OpenRouter")
     }
 
-    async fn chat_stream(&self, _request: ChatRequest) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
+    async fn chat_stream(
+        &self,
+        _request: ChatRequest,
+    ) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
         anyhow::bail!("OpenRouter streaming not yet implemented")
     }
 
-    async fn analyze_screenshot(&self, _image_bytes: &[u8], _prompt: &str) -> Result<ScreenshotAnalysis> {
+    async fn analyze_screenshot(
+        &self,
+        _image_bytes: &[u8],
+        _prompt: &str,
+    ) -> Result<ScreenshotAnalysis> {
         anyhow::bail!("Use local vision model for screenshot analysis")
     }
 }
@@ -241,7 +267,8 @@ impl ZaiCodingProvider {
 #[async_trait]
 impl AiProvider for ZaiCodingProvider {
     fn id(&self) -> &ProviderId {
-        static ID: once_cell::sync::Lazy<ProviderId> = once_cell::sync::Lazy::new(|| ProviderId("zai".to_string()));
+        static ID: once_cell::sync::Lazy<ProviderId> =
+            once_cell::sync::Lazy::new(|| ProviderId("zai".to_string()));
         &ID
     }
 
@@ -279,11 +306,18 @@ impl AiProvider for ZaiCodingProvider {
         anyhow::bail!("Use chat_stream for Z.AI")
     }
 
-    async fn chat_stream(&self, _request: ChatRequest) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
+    async fn chat_stream(
+        &self,
+        _request: ChatRequest,
+    ) -> Result<tokio_stream::wrappers::ReceiverStream<ChatResponse>> {
         anyhow::bail!("Z.AI streaming not yet implemented")
     }
 
-    async fn analyze_screenshot(&self, _image_bytes: &[u8], _prompt: &str) -> Result<ScreenshotAnalysis> {
+    async fn analyze_screenshot(
+        &self,
+        _image_bytes: &[u8],
+        _prompt: &str,
+    ) -> Result<ScreenshotAnalysis> {
         anyhow::bail!("Use local vision model for screenshot analysis")
     }
 }

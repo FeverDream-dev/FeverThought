@@ -1,15 +1,16 @@
 use crate::{
     events::{EventEnvelope, EventSubscriber, PipelineEvent},
-    context::ContextAssembler,
     permissions::PermissionManager,
-    routing::{ModelRouter, ModelRoutingConfig, RoutingDecision, TaskType},
-    AgentExecution, AgentMessage, AgentRole, ClarificationQuestion,
-    ExecutionStatus, PipelineState, Plan,
+    routing::{ModelRouter, ModelRoutingConfig, TaskType},
+    AgentExecution, AgentMessage, AgentRole, ClarificationQuestion, ExecutionStatus, PipelineState,
+    Plan,
 };
-use feverthoth_providers::{AiProvider, ChatMessage, ChatRequest, MessageRole, ModelId, ProviderId};
+use feverthoth_providers::{
+    AiProvider, ChatMessage, ChatRequest, MessageRole, ModelId, ProviderId,
+};
+use parking_lot::RwLock;
 use std::collections::HashMap;
 use std::sync::Arc;
-use parking_lot::RwLock;
 use uuid::Uuid;
 
 /// Complete 7-step agent pipeline:
@@ -25,10 +26,7 @@ pub struct AgentPipeline {
 impl AgentPipeline {
     pub fn new(providers: Arc<RwLock<HashMap<ProviderId, Arc<dyn AiProvider>>>>) -> Self {
         let permissions = PermissionManager::new();
-        let router = ModelRouter::new(
-            ModelRoutingConfig::default(),
-            PermissionManager::new(),
-        );
+        let router = ModelRouter::new(ModelRoutingConfig::default(), PermissionManager::new());
         Self {
             providers,
             executions: RwLock::new(HashMap::new()),
@@ -43,10 +41,7 @@ impl AgentPipeline {
     }
 
     pub fn with_routing_config(&mut self, config: ModelRoutingConfig) {
-        *self.model_router.write() = ModelRouter::new(
-            config,
-            self.permissions.read().clone(),
-        );
+        *self.model_router.write() = ModelRouter::new(config, self.permissions.read().clone());
     }
 
     pub fn subscribe(&self, subscriber: Arc<dyn EventSubscriber>) {
@@ -88,7 +83,10 @@ impl AgentPipeline {
     ) -> anyhow::Result<IntakeResult> {
         let provider = self.get_default_provider()?;
 
-        let routing = self.model_router.read().route(&TaskType::Chat, false, false);
+        let routing = self
+            .model_router
+            .read()
+            .route(&TaskType::Chat, false, false);
 
         let messages = vec![
             ChatMessage {
@@ -131,12 +129,15 @@ impl AgentPipeline {
             });
         }
 
-        self.emit(execution_id, PipelineEvent::IntakeCompleted {
-            ambiguity_detected: result.ambiguity_detected,
-            repo_scope: result.repo_scope.clone(),
-            risk_tier: result.risk_tier.clone(),
-            destructive_potential: result.destructive_potential,
-        });
+        self.emit(
+            execution_id,
+            PipelineEvent::IntakeCompleted {
+                ambiguity_detected: result.ambiguity_detected,
+                repo_scope: result.repo_scope.clone(),
+                risk_tier: result.risk_tier.clone(),
+                destructive_potential: result.destructive_potential,
+            },
+        );
 
         Ok(result)
     }
@@ -149,7 +150,10 @@ impl AgentPipeline {
     ) -> anyhow::Result<Vec<ClarificationQuestion>> {
         let provider = self.get_default_provider()?;
 
-        let routing = self.model_router.read().route(&TaskType::Chat, false, false);
+        let routing = self
+            .model_router
+            .read()
+            .route(&TaskType::Chat, false, false);
 
         if let Some(exec) = self.executions.write().get_mut(execution_id) {
             exec.pipeline_state = PipelineState::Clarifying;
@@ -194,13 +198,21 @@ impl AgentPipeline {
             });
         }
 
-        let event_questions: Vec<_> = questions.iter().map(|q| crate::events::ClarificationEventQuestion {
-            id: q.id.clone(),
-            question: q.question.clone(),
-            options: q.options.iter().map(|o| o.label.clone()).collect(),
-            allow_custom: q.allow_custom,
-        }).collect();
-        self.emit(execution_id, PipelineEvent::ClarificationNeeded { questions: event_questions });
+        let event_questions: Vec<_> = questions
+            .iter()
+            .map(|q| crate::events::ClarificationEventQuestion {
+                id: q.id.clone(),
+                question: q.question.clone(),
+                options: q.options.iter().map(|o| o.label.clone()).collect(),
+                allow_custom: q.allow_custom,
+            })
+            .collect();
+        self.emit(
+            execution_id,
+            PipelineEvent::ClarificationNeeded {
+                questions: event_questions,
+            },
+        );
 
         Ok(questions)
     }
@@ -213,7 +225,10 @@ impl AgentPipeline {
     ) -> anyhow::Result<ContextResult> {
         let provider = self.get_default_provider()?;
 
-        let routing = self.model_router.read().route(&TaskType::ContextGathering, false, false);
+        let routing = self
+            .model_router
+            .read()
+            .route(&TaskType::ContextGathering, false, false);
 
         if let Some(exec) = self.executions.write().get_mut(execution_id) {
             exec.pipeline_state = PipelineState::GatheringContext;
@@ -257,11 +272,14 @@ impl AgentPipeline {
             });
         }
 
-        self.emit(execution_id, PipelineEvent::ContextGathered {
-            files: result.files.clone(),
-            architecture_notes: result.architecture_notes.clone(),
-            probable_change_surface: result.probable_change_surface.clone(),
-        });
+        self.emit(
+            execution_id,
+            PipelineEvent::ContextGathered {
+                files: result.files.clone(),
+                architecture_notes: result.architecture_notes.clone(),
+                probable_change_surface: result.probable_change_surface.clone(),
+            },
+        );
 
         Ok(result)
     }
@@ -270,20 +288,21 @@ impl AgentPipeline {
     pub async fn plan(&self, execution_id: &str, user_message: &str) -> anyhow::Result<Plan> {
         let provider = self.get_default_provider()?;
 
-        let routing = self.model_router.read().route(&TaskType::CodingPlan, false, false);
+        let routing = self
+            .model_router
+            .read()
+            .route(&TaskType::CodingPlan, false, false);
 
         if let Some(exec) = self.executions.write().get_mut(execution_id) {
             exec.pipeline_state = PipelineState::Planning;
         }
 
         let exec = self.executions.read().get(execution_id).cloned();
-        let mut history = vec![
-            ChatMessage {
-                role: MessageRole::System,
-                content: crate::prompts::PLANNER.to_string(),
-                images: None,
-            },
-        ];
+        let mut history = vec![ChatMessage {
+            role: MessageRole::System,
+            content: crate::prompts::PLANNER.to_string(),
+            images: None,
+        }];
 
         if let Some(exec) = exec {
             for msg in &exec.messages {
@@ -327,11 +346,14 @@ impl AgentPipeline {
             });
         }
 
-        self.emit(execution_id, PipelineEvent::PlanCreated {
-            plan_id: plan.id.clone(),
-            title: plan.title.clone(),
-            step_count: plan.steps.len(),
-        });
+        self.emit(
+            execution_id,
+            PipelineEvent::PlanCreated {
+                plan_id: plan.id.clone(),
+                title: plan.title.clone(),
+                step_count: plan.steps.len(),
+            },
+        );
 
         Ok(plan)
     }
@@ -344,7 +366,10 @@ impl AgentPipeline {
     ) -> anyhow::Result<String> {
         let provider = self.get_default_provider()?;
 
-        let routing = self.model_router.read().route(&TaskType::CodingPlan, false, false);
+        let routing = self
+            .model_router
+            .read()
+            .route(&TaskType::CodingPlan, false, false);
 
         if let Some(exec) = self.executions.write().get_mut(execution_id) {
             exec.pipeline_state = PipelineState::Executing;
@@ -383,24 +408,26 @@ impl AgentPipeline {
             });
         }
 
-        self.emit(execution_id, PipelineEvent::ExecutionProgress {
-            step_id: "current".to_string(),
-            status: "completed".to_string(),
-            description: step_description.to_string(),
-        });
+        self.emit(
+            execution_id,
+            PipelineEvent::ExecutionProgress {
+                step_id: "current".to_string(),
+                status: "completed".to_string(),
+                description: step_description.to_string(),
+            },
+        );
 
         Ok(response.content)
     }
 
     /// Step 6: Review — inspect proposed changes.
-    pub async fn review(
-        &self,
-        execution_id: &str,
-        changes: &str,
-    ) -> anyhow::Result<ReviewResult> {
+    pub async fn review(&self, execution_id: &str, changes: &str) -> anyhow::Result<ReviewResult> {
         let provider = self.get_default_provider()?;
 
-        let routing = self.model_router.read().route(&TaskType::Review, false, false);
+        let routing = self
+            .model_router
+            .read()
+            .route(&TaskType::Review, false, false);
 
         if let Some(exec) = self.executions.write().get_mut(execution_id) {
             exec.pipeline_state = PipelineState::Reviewing;
@@ -444,8 +471,10 @@ impl AgentPipeline {
             });
         }
 
-        let findings: Vec<crate::events::ReviewFinding> = result.findings.iter().map(|f| {
-            crate::events::ReviewFinding {
+        let findings: Vec<crate::events::ReviewFinding> = result
+            .findings
+            .iter()
+            .map(|f| crate::events::ReviewFinding {
                 severity: match f.severity.as_str() {
                     "critical" => crate::events::FindingSeverity::Critical,
                     "error" => crate::events::FindingSeverity::Error,
@@ -455,26 +484,28 @@ impl AgentPipeline {
                 description: f.description.clone(),
                 file: f.file.clone(),
                 line: f.line,
-            }
-        }).collect();
+            })
+            .collect();
 
-        self.emit(execution_id, PipelineEvent::ReviewCompleted {
-            findings,
-            approved: result.approved,
-        });
+        self.emit(
+            execution_id,
+            PipelineEvent::ReviewCompleted {
+                findings,
+                approved: result.approved,
+            },
+        );
 
         Ok(result)
     }
 
     /// Step 7: Summarize — generate commit message and change summary.
-    pub async fn summarize(
-        &self,
-        execution_id: &str,
-        diff: &str,
-    ) -> anyhow::Result<SummaryResult> {
+    pub async fn summarize(&self, execution_id: &str, diff: &str) -> anyhow::Result<SummaryResult> {
         let provider = self.get_default_provider()?;
 
-        let routing = self.model_router.read().route(&TaskType::Chat, false, false);
+        let routing = self
+            .model_router
+            .read()
+            .route(&TaskType::Chat, false, false);
 
         if let Some(exec) = self.executions.write().get_mut(execution_id) {
             exec.pipeline_state = PipelineState::Summarizing;
@@ -519,10 +550,13 @@ impl AgentPipeline {
             });
         }
 
-        self.emit(execution_id, PipelineEvent::SummaryGenerated {
-            commit_message: result.commit_message.clone(),
-            change_summary: result.change_summary.clone(),
-        });
+        self.emit(
+            execution_id,
+            PipelineEvent::SummaryGenerated {
+                commit_message: result.commit_message.clone(),
+                change_summary: result.change_summary.clone(),
+            },
+        );
         self.emit(execution_id, PipelineEvent::PipelineCompleted);
 
         Ok(result)
@@ -530,7 +564,8 @@ impl AgentPipeline {
 
     fn get_default_provider(&self) -> anyhow::Result<Arc<dyn AiProvider>> {
         let providers = self.providers.read();
-        providers.get(&ProviderId("ollama".to_string()))
+        providers
+            .get(&ProviderId("ollama".to_string()))
             .cloned()
             .or_else(|| providers.values().next().cloned())
             .ok_or_else(|| anyhow::anyhow!("No AI provider available"))
@@ -578,13 +613,36 @@ pub struct SummaryResult {
 fn parse_intake(content: &str) -> IntakeResult {
     if let Ok(json) = extract_json(content) {
         IntakeResult {
-            ambiguity_detected: json.get("ambiguity_detected").and_then(|v| v.as_bool()).unwrap_or(false),
-            repo_scope: json.get("repo_scope").and_then(|v| v.as_str()).unwrap_or("unknown").to_string(),
-            risk_tier: json.get("risk_tier").and_then(|v| v.as_str()).unwrap_or("low").to_string(),
-            destructive_potential: json.get("destructive_potential").and_then(|v| v.as_bool()).unwrap_or(false),
-            needs_clarification: json.get("needs_clarification").and_then(|v| v.as_bool()).unwrap_or(false),
-            needs_context: json.get("needs_context").and_then(|v| v.as_bool()).unwrap_or(true),
-            needs_vision: json.get("needs_vision").and_then(|v| v.as_bool()).unwrap_or(false),
+            ambiguity_detected: json
+                .get("ambiguity_detected")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false),
+            repo_scope: json
+                .get("repo_scope")
+                .and_then(|v| v.as_str())
+                .unwrap_or("unknown")
+                .to_string(),
+            risk_tier: json
+                .get("risk_tier")
+                .and_then(|v| v.as_str())
+                .unwrap_or("low")
+                .to_string(),
+            destructive_potential: json
+                .get("destructive_potential")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false),
+            needs_clarification: json
+                .get("needs_clarification")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false),
+            needs_context: json
+                .get("needs_context")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(true),
+            needs_vision: json
+                .get("needs_vision")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(false),
         }
     } else {
         IntakeResult {
@@ -602,13 +660,16 @@ fn parse_intake(content: &str) -> IntakeResult {
 fn parse_context(content: &str) -> ContextResult {
     if let Ok(json) = extract_json(content) {
         ContextResult {
-            files: json.get("files")
+            files: json
+                .get("files")
                 .and_then(|v| serde_json::from_value(v.clone()).ok())
                 .unwrap_or_default(),
-            architecture_notes: json.get("architecture_notes")
+            architecture_notes: json
+                .get("architecture_notes")
                 .and_then(|v| serde_json::from_value(v.clone()).ok())
                 .unwrap_or_default(),
-            probable_change_surface: json.get("probable_change_surface")
+            probable_change_surface: json
+                .get("probable_change_surface")
                 .and_then(|v| serde_json::from_value(v.clone()).ok())
                 .unwrap_or_default(),
         }
@@ -623,22 +684,34 @@ fn parse_context(content: &str) -> ContextResult {
 
 fn parse_review(content: &str) -> ReviewResult {
     if let Ok(json) = extract_json(content) {
-        let findings: Vec<ReviewFindingParsed> = json.get("findings")
+        let findings: Vec<ReviewFindingParsed> = json
+            .get("findings")
             .and_then(|v| v.as_array())
             .map(|arr| {
-                arr.iter().filter_map(|f| {
-                    Some(ReviewFindingParsed {
-                        severity: f.get("severity").and_then(|v| v.as_str()).unwrap_or("info").to_string(),
-                        description: f.get("description").and_then(|v| v.as_str()).unwrap_or("").to_string(),
+                arr.iter()
+                    .map(|f| ReviewFindingParsed {
+                        severity: f
+                            .get("severity")
+                            .and_then(|v| v.as_str())
+                            .unwrap_or("info")
+                            .to_string(),
+                        description: f
+                            .get("description")
+                            .and_then(|v| v.as_str())
+                            .unwrap_or("")
+                            .to_string(),
                         file: f.get("file").and_then(|v| v.as_str()).map(String::from),
                         line: f.get("line").and_then(|v| v.as_u64()).map(|l| l as u32),
                     })
-                }).collect()
+                    .collect()
             })
             .unwrap_or_default();
 
         ReviewResult {
-            approved: json.get("approved").and_then(|v| v.as_bool()).unwrap_or(true),
+            approved: json
+                .get("approved")
+                .and_then(|v| v.as_bool())
+                .unwrap_or(true),
             findings,
         }
     } else {
@@ -652,8 +725,16 @@ fn parse_review(content: &str) -> ReviewResult {
 fn parse_summary(content: &str) -> SummaryResult {
     if let Ok(json) = extract_json(content) {
         SummaryResult {
-            commit_message: json.get("commit_message").and_then(|v| v.as_str()).unwrap_or("chore: update files").to_string(),
-            change_summary: json.get("change_summary").and_then(|v| v.as_str()).unwrap_or("Changes made.").to_string(),
+            commit_message: json
+                .get("commit_message")
+                .and_then(|v| v.as_str())
+                .unwrap_or("chore: update files")
+                .to_string(),
+            change_summary: json
+                .get("change_summary")
+                .and_then(|v| v.as_str())
+                .unwrap_or("Changes made.")
+                .to_string(),
         }
     } else {
         SummaryResult {
@@ -665,7 +746,10 @@ fn parse_summary(content: &str) -> SummaryResult {
 
 fn parse_clarification_questions(content: &str) -> Vec<ClarificationQuestion> {
     if let Ok(json) = extract_json(content) {
-        if let Some(questions) = json.get("questions").and_then(|q| serde_json::from_value(q.clone()).ok()) {
+        if let Some(questions) = json
+            .get("questions")
+            .and_then(|q| serde_json::from_value(q.clone()).ok())
+        {
             return questions;
         }
     }
@@ -707,7 +791,9 @@ fn extract_json(content: &str) -> anyhow::Result<serde_json::Value> {
     if trimmed.starts_with('{') {
         Ok(serde_json::from_str(trimmed)?)
     } else if let Some(start) = content.find('{') {
-        let end = content.rfind('}').ok_or_else(|| anyhow::anyhow!("No closing brace"))?;
+        let end = content
+            .rfind('}')
+            .ok_or_else(|| anyhow::anyhow!("No closing brace"))?;
         Ok(serde_json::from_str(&content[start..=end])?)
     } else {
         Err(anyhow::anyhow!("No JSON found"))

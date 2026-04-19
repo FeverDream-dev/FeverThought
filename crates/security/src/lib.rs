@@ -1,6 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::path::PathBuf;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AuditEntry {
@@ -14,6 +12,12 @@ pub struct AuditEntry {
 
 pub struct SecurityManager {
     audit_log: Vec<AuditEntry>,
+}
+
+impl Default for SecurityManager {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl SecurityManager {

@@ -26,6 +26,7 @@ pub struct LspClient {
     pending: PendingRequests,
     capabilities: Arc<Mutex<Option<ServerCapabilities>>>,
     is_running: Arc<std::sync::atomic::AtomicBool>,
+    #[allow(dead_code)]
     notification_tx: Option<std::sync::mpsc::Sender<LspNotification>>,
 }
 
@@ -42,7 +43,7 @@ impl LspClient {
         language_id: String,
         command: &str,
         args: &[String],
-        root_uri: lsp_types::Uri,
+        _root_uri: lsp_types::Uri,
     ) -> anyhow::Result<(Self, Child)> {
         let mut child = Command::new(command)
             .args(args)
@@ -78,7 +79,13 @@ impl LspClient {
 
         std::thread::spawn(move || {
             let (notification_tx, _notification_rx) = std::sync::mpsc::channel::<LspNotification>();
-            read_lsp_stdout(stdout, pending_clone, caps_clone, running_clone, Some(notification_tx));
+            read_lsp_stdout(
+                stdout,
+                pending_clone,
+                caps_clone,
+                running_clone,
+                Some(notification_tx),
+            );
         });
 
         std::thread::spawn(move || {
@@ -107,12 +114,20 @@ impl LspClient {
             "params": params,
         });
 
-        let msg = format!("Content-Length: {}\r\n\r\n{}", request.to_string().len(), request);
+        let msg = format!(
+            "Content-Length: {}\r\n\r\n{}",
+            request.to_string().len(),
+            request
+        );
         if let Some(ref stdin_tx) = self.stdin_tx {
-            stdin_tx.send(msg).map_err(|e| anyhow::anyhow!("Failed to send LSP request: {}", e))?;
+            stdin_tx
+                .send(msg)
+                .map_err(|e| anyhow::anyhow!("Failed to send LSP request: {}", e))?;
         }
 
-        let response = rx.await.map_err(|_| anyhow::anyhow!("LSP request cancelled"))?
+        let response = rx
+            .await
+            .map_err(|_| anyhow::anyhow!("LSP request cancelled"))?
             .map_err(|e| anyhow::anyhow!("LSP error: {}", e))?;
         let result: R::Result = serde_json::from_value(response)?;
         Ok(result)
@@ -130,9 +145,15 @@ impl LspClient {
             "method": N::METHOD,
             "params": params,
         });
-        let msg = format!("Content-Length: {}\r\n\r\n{}", notification.to_string().len(), notification);
+        let msg = format!(
+            "Content-Length: {}\r\n\r\n{}",
+            notification.to_string().len(),
+            notification
+        );
         if let Some(ref stdin_tx) = self.stdin_tx {
-            stdin_tx.send(msg).map_err(|e| anyhow::anyhow!("Failed to send LSP notification: {}", e))?;
+            stdin_tx
+                .send(msg)
+                .map_err(|e| anyhow::anyhow!("Failed to send LSP notification: {}", e))?;
         }
         Ok(())
     }
@@ -186,7 +207,9 @@ fn read_lsp_stdout(
             }
         }
 
-        let Some(length) = content_length else { continue };
+        let Some(length) = content_length else {
+            continue;
+        };
 
         let mut body_buf = vec![0u8; length];
         if reader.read_exact(&mut body_buf).is_err() {
@@ -220,7 +243,10 @@ fn read_lsp_stdout(
                 }
             }
         } else if let Some(method) = body.get("method").and_then(|v| v.as_str()) {
-            let params = body.get("params").cloned().unwrap_or(Value::Object(serde_json::Map::new()));
+            let params = body
+                .get("params")
+                .cloned()
+                .unwrap_or(Value::Object(serde_json::Map::new()));
             if let Some(ref tx) = notification_tx {
                 let _ = tx.send(LspNotification {
                     method: method.to_string(),

@@ -1,14 +1,14 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use base64::{Engine as _, engine::general_purpose::STANDARD as BASE64};
-use ollama_rs::generation::chat::{ChatMessage as OllamaChatMessage, request::ChatMessageRequest};
+use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
+use ollama_rs::generation::chat::{request::ChatMessageRequest, ChatMessage as OllamaChatMessage};
 use ollama_rs::generation::images::Image;
 use ollama_rs::Ollama;
 use tokio_stream::StreamExt;
 
 use crate::{
-    AiProvider, ChatMessage, ChatRequest, ChatResponse, MessageRole, ModelCapabilities,
-    ModelId, ModelInfo, ProviderId, ScreenshotAnalysis, TokenUsage,
+    AiProvider, ChatMessage, ChatRequest, ChatResponse, MessageRole, ModelCapabilities, ModelId,
+    ModelInfo, ProviderId, ScreenshotAnalysis, TokenUsage,
 };
 
 const DEFAULT_OLLAMA_URL: &str = "http://localhost";
@@ -31,11 +31,17 @@ Return ONLY valid JSON."#;
 pub struct OllamaProvider {
     client: Ollama,
     vision_model: String,
+    #[allow(dead_code)]
     default_model: String,
 }
 
 impl OllamaProvider {
-    pub fn new(url: Option<&str>, port: Option<u16>, vision_model: Option<&str>, default_model: Option<&str>) -> Self {
+    pub fn new(
+        url: Option<&str>,
+        port: Option<u16>,
+        vision_model: Option<&str>,
+        default_model: Option<&str>,
+    ) -> Self {
         let client = Ollama::new(
             url.unwrap_or(DEFAULT_OLLAMA_URL).to_string(),
             port.unwrap_or(DEFAULT_OLLAMA_PORT),
@@ -65,7 +71,8 @@ fn to_ollama_messages(messages: &[ChatMessage]) -> Vec<OllamaChatMessage> {
     messages
         .iter()
         .map(|msg| {
-            let mut ollama_msg = OllamaChatMessage::new(convert_role(&msg.role), msg.content.clone());
+            let mut ollama_msg =
+                OllamaChatMessage::new(convert_role(&msg.role), msg.content.clone());
             if let Some(images) = &msg.images {
                 let ollama_images: Vec<Image> = images
                     .iter()
@@ -81,7 +88,8 @@ fn to_ollama_messages(messages: &[ChatMessage]) -> Vec<OllamaChatMessage> {
 #[async_trait]
 impl AiProvider for OllamaProvider {
     fn id(&self) -> &ProviderId {
-        static ID: once_cell::sync::Lazy<ProviderId> = once_cell::sync::Lazy::new(|| ProviderId("ollama".to_string()));
+        static ID: once_cell::sync::Lazy<ProviderId> =
+            once_cell::sync::Lazy::new(|| ProviderId("ollama".to_string()));
         &ID
     }
 
@@ -161,7 +169,10 @@ impl AiProvider for OllamaProvider {
         let ollama_messages = to_ollama_messages(&request.messages);
         let ollama_request = ChatMessageRequest::new(model, ollama_messages);
 
-        let stream = self.client.send_chat_messages_stream(ollama_request).await?;
+        let stream = self
+            .client
+            .send_chat_messages_stream(ollama_request)
+            .await?;
 
         let (tx, rx) = tokio::sync::mpsc::channel(32);
 
@@ -189,10 +200,14 @@ impl AiProvider for OllamaProvider {
         Ok(tokio_stream::wrappers::ReceiverStream::new(rx))
     }
 
-    async fn analyze_screenshot(&self, image_bytes: &[u8], prompt: &str) -> Result<ScreenshotAnalysis> {
+    async fn analyze_screenshot(
+        &self,
+        image_bytes: &[u8],
+        prompt: &str,
+    ) -> Result<ScreenshotAnalysis> {
         let b64 = BASE64.encode(image_bytes);
-        let message = OllamaChatMessage::user(prompt.to_string())
-            .with_images(vec![Image::from_base64(b64)]);
+        let message =
+            OllamaChatMessage::user(prompt.to_string()).with_images(vec![Image::from_base64(b64)]);
 
         let request = ChatMessageRequest::new(
             self.vision_model.clone(),

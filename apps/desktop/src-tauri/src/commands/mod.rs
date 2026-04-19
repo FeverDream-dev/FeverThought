@@ -1,5 +1,5 @@
-use feverthoth_core::state::AppState;
 use feverthoth_core::app_info;
+use feverthoth_core::state::AppState;
 use tauri::State;
 
 #[tauri::command]
@@ -97,18 +97,12 @@ pub async fn terminal_resize(
 }
 
 #[tauri::command]
-pub async fn terminal_kill(
-    _state: State<'_, AppState>,
-    _id: String,
-) -> Result<(), String> {
+pub async fn terminal_kill(_state: State<'_, AppState>, _id: String) -> Result<(), String> {
     Ok(())
 }
 
 #[tauri::command]
-pub async fn ai_chat(
-    _state: State<'_, AppState>,
-    _message: String,
-) -> Result<String, String> {
+pub async fn ai_chat(_state: State<'_, AppState>, _message: String) -> Result<String, String> {
     Ok("AI chat not yet connected".to_string())
 }
 
@@ -122,9 +116,7 @@ pub async fn ai_list_models(
 }
 
 #[tauri::command]
-pub async fn ai_check_ollama(
-    state: State<'_, AppState>,
-) -> Result<bool, String> {
+pub async fn ai_check_ollama(state: State<'_, AppState>) -> Result<bool, String> {
     let providers = state.providers.read();
     if let Some(provider) = providers.get(&feverthoth_providers::ProviderId("ollama".to_string())) {
         Ok(provider.is_available().await)
