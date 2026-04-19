@@ -19,7 +19,7 @@ pub async fn workspace_open(
 ) -> Result<feverthoth_workspace::Workspace, String> {
     let mut ws = state.workspace.write();
     ws.open(std::path::PathBuf::from(&path))
-        .map(|w| w.clone())
+        .cloned()
         .map_err(|e| e.to_string())
 }
 
