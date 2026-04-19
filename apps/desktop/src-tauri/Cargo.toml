@@ -1,0 +1,39 @@
+[package]
+name = "feverthoth-desktop"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "FeverThoth IDE desktop application"
+
+[lib]
+name = "feverthoth_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "devtools"] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-process = "2"
+tauri-plugin-updater = "2"
+tauri-plugin-os = "2"
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+
+# Workspace crates
+feverthoth-core = { workspace = true }
+feverthoth-providers = { workspace = true }
+feverthoth-lsp = { workspace = true }
+feverthoth-agents = { workspace = true }
+feverthoth-workspace = { workspace = true }
+feverthoth-settings = { workspace = true }
+feverthoth-security = { workspace = true }
+feverthoth-mcp = { workspace = true }

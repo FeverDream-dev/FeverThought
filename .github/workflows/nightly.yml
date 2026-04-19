@@ -1,0 +1,73 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            target: x86_64-pc-windows-msvc
+            runs-on: windows-latest
+            ext: exe
+          - platform: macos
+            target: aarch64-apple-darwin
+            runs-on: macos-latest
+            ext: dmg
+          - platform: linux
+            target: x86_64-unknown-linux-gnu
+            runs-on: ubuntu-latest
+            ext: AppImage
+
+    name: Nightly ${{ matrix.platform }}
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - name: Install Linux dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @feverthoth/desktop tauri build --target ${{ matrix.target }}
+      - name: Rename artifact
+        shell: bash
+        run: |
+          VERSION="nightly-$(date +%Y%m%d)"
+          find apps/desktop/src-tauri/target/release/bundle -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" \) | while read f; do
+            ext="${f##*.}"
+            mv "$f" "feverthoth-${VERSION}-${{ matrix.platform }}-x64.${ext}"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: feverthoth-nightly-${{ matrix.platform }}
+          path: feverthoth-nightly-*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Create nightly pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly-${{ github.run_number }}
+          prerelease: true
+          name: Nightly Build #${{ github.run_number }}
+          files: artifacts/**/*

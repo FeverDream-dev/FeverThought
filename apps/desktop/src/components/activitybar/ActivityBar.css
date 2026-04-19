@@ -1,0 +1,54 @@
+.activity-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 48px;
+  background: var(--ft-bg-surface);
+  border-right: 1px solid var(--ft-border-default);
+  padding: var(--ft-space-xs) 0;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.activity-bar-top,
+.activity-bar-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.activity-bar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 42px;
+  background: transparent;
+  color: var(--ft-text-tertiary);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all var(--ft-transition-fast);
+}
+
+.activity-bar-item:hover {
+  color: var(--ft-text-secondary);
+  background: var(--ft-bg-glass-hover);
+}
+
+.activity-bar-item.active {
+  color: var(--ft-accent-primary);
+}
+
+.activity-bar-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: var(--ft-accent-primary);
+  border-radius: 0 1px 1px 0;
+}

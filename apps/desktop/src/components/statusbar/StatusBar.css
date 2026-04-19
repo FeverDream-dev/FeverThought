@@ -1,0 +1,35 @@
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+  padding: 0 var(--ft-space-md);
+  background: linear-gradient(180deg, rgba(33, 150, 243, 0.06) 0%, rgba(33, 150, 243, 0.12) 100%);
+  border-top: 1px solid var(--ft-border-default);
+  font-size: 11px;
+  color: var(--ft-text-secondary);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.statusbar-left,
+.statusbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-md);
+}
+
+.statusbar-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: default;
+}
+
+.statusbar-item.connected {
+  color: var(--ft-accent-success);
+}
+
+.statusbar-item.disconnected {
+  color: var(--ft-accent-error);
+}

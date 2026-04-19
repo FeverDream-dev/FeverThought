@@ -1,0 +1,19 @@
+[package]
+name = "feverthoth-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+parking_lot = { workspace = true }
+tracing = { workspace = true }
+feverthoth-settings = { workspace = true }
+feverthoth-workspace = { workspace = true }
+feverthoth-providers = { workspace = true }
+feverthoth-lsp = { workspace = true }
+feverthoth-mcp = { workspace = true }

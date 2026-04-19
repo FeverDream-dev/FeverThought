@@ -1,0 +1,38 @@
+{
+  "name": "@feverthoth/desktop",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev:vite": "vite",
+    "build:vite": "tsc -b && vite build",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-shell": "^2",
+    "@tauri-apps/plugin-fs": "^2",
+    "@tauri-apps/plugin-dialog": "^2",
+    "@monaco-editor/react": "^4.7",
+    "@xterm/xterm": "^5.5",
+    "@xterm/addon-fit": "^0.10",
+    "@xterm/addon-web-links": "^0.11",
+    "@xterm/addon-search": "^0.15",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5",
+    "lucide-react": "^0.468"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.6",
+    "typescript": "~5.8.3",
+    "vite": "^6",
+    "@tauri-apps/cli": "^2"
+  }
+}

@@ -1,0 +1,264 @@
+/* ═══════════════════════════════════════════════════════════════════
+   FeverThoth Design System — Frutiger Aero Tokens
+   Canonical token definitions matching the design plan specification.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Theme-Independent Primitives ──────────────────────────────── */
+:root {
+  /* Font families */
+  --ft-font-sans: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --ft-font-mono: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+
+  /* Spacing scale */
+  --ft-space-xs: 2px;
+  --ft-space-sm: 4px;
+  --ft-space-md: 8px;
+  --ft-space-lg: 16px;
+  --ft-space-xl: 24px;
+  --ft-space-2xl: 32px;
+
+  /* Z-index scale */
+  --ft-z-sidebar: 10;
+  --ft-z-panel: 15;
+  --ft-z-editor: 20;
+  --ft-z-dropdown: 100;
+  --ft-z-modal: 200;
+  --ft-z-tooltip: 300;
+
+  /* ─── Radius tokens (plan) ──────────────────────────────────── */
+  --ft-radius-xs: 6px;
+  --ft-radius-sm: 10px;
+  --ft-radius-md: 14px;
+  --ft-radius-lg: 18px;
+  --ft-radius-xl: 24px;
+  --ft-radius-pill: 999px;
+
+  /* ─── Shadow tokens (plan) ──────────────────────────────────── */
+  --ft-shadow-soft: 0 8px 24px rgba(44, 112, 150, 0.12);
+  --ft-shadow-medium: 0 12px 32px rgba(36, 89, 120, 0.18);
+  --ft-shadow-focus: 0 0 0 3px rgba(83, 169, 255, 0.32);
+  --ft-shadow-inset-gloss: inset 0 1px 0 rgba(255,255,255,0.65);
+
+  /* ─── Material / Blur tokens (plan) ─────────────────────────── */
+  --ft-material-blur-sm: blur(8px);
+  --ft-material-blur-md: blur(14px);
+  --ft-material-blur-lg: blur(24px);
+  --ft-material-border-glass: 1px solid rgba(255,255,255,0.45);
+
+  /* ─── Motion tokens (plan) ──────────────────────────────────── */
+  --ft-motion-fast: 120ms;
+  --ft-motion-base: 180ms;
+  --ft-motion-slow: 260ms;
+  --ft-motion-spring-stiffness: 220;
+  --ft-motion-spring-damping: 24;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Light Theme — Frutiger Aero
+   ═══════════════════════════════════════════════════════════════════ */
+:root,
+[data-theme="frutiger-light"] {
+  /* ─── Color tokens (plan — exact values) ────────────────────── */
+  --ft-color-bg-app: #dff4ff;
+  --ft-color-bg-workspace: #f6fdff;
+  --ft-color-bg-panel: rgba(255,255,255,0.72);
+  --ft-color-bg-panel-strong: rgba(255,255,255,0.86);
+
+  --ft-color-text-primary: #11324a;
+  --ft-color-text-secondary: #355a72;
+  --ft-color-text-muted: #5f7e95;
+  --ft-color-text-inverse: #ffffff;
+
+  --ft-color-accent-blue: #3fb9ff;
+  --ft-color-accent-cyan: #5ce1e6;
+  --ft-color-accent-green: #68e6b1;
+  --ft-color-accent-gold: #ffd36b;
+
+  --ft-color-status-success: #4bc98a;
+  --ft-color-status-warning: #ffbe55;
+  --ft-color-status-danger: #ff6c7a;
+  --ft-color-status-info: #53a9ff;
+
+  /* ─── Backward-compatible aliases ───────────────────────────── */
+  /* Old naming scheme → new plan tokens. Components still use    */
+  /* the old names; these aliases auto-follow theme switches via  */
+  /* var() references.                                            */
+
+  /* Backgrounds */
+  --ft-bg-base: var(--ft-color-bg-app);
+  --ft-bg-surface: var(--ft-color-bg-workspace);
+  --ft-bg-glass: var(--ft-color-bg-panel);
+  --ft-bg-glass-hover: var(--ft-color-bg-panel-strong);
+  --ft-bg-glass-active: rgba(255,255,255,0.92);
+  --ft-bg-input: #ffffff;
+
+  /* Text */
+  --ft-text-primary: var(--ft-color-text-primary);
+  --ft-text-secondary: var(--ft-color-text-secondary);
+  --ft-text-tertiary: var(--ft-color-text-muted);
+  --ft-text-inverse: var(--ft-color-text-inverse);
+  --ft-text-link: #3fb9ff;
+  --ft-text-on-accent: #ffffff;
+
+  /* Accents */
+  --ft-accent-primary: var(--ft-color-accent-blue);
+  --ft-accent-primary-hover: #2ea8f0;
+  --ft-accent-primary-active: #1e96e0;
+  --ft-accent-secondary: #4bc98a;
+  --ft-accent-warning: var(--ft-color-status-warning);
+  --ft-accent-error: var(--ft-color-status-danger);
+  --ft-accent-info: var(--ft-color-status-info);
+  --ft-accent-success: var(--ft-color-status-success);
+
+  /* Transitions (backward compat — includes easing) */
+  --ft-transition-fast: 120ms ease;
+  --ft-transition-normal: 180ms ease;
+  --ft-transition-slow: 260ms ease;
+
+  /* Glass / Material (backward compat) */
+  --ft-glass-blur: var(--ft-material-blur-md);
+  --ft-glass-border: var(--ft-material-border-glass);
+
+  /* ─── Gradients (component use, not in plan spec) ───────────── */
+  --ft-bg-gradient-sky: linear-gradient(180deg, #7ec8e3 0%, #4a9cd6 40%, #2d7bc9 100%);
+  --ft-bg-gradient-accent: linear-gradient(135deg, #4fc3f7 0%, #2196f3 50%, #1976d2 100%);
+  --ft-bg-gradient-aurora: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+  --ft-bg-gradient-warm: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+  --ft-bg-gradient-header: linear-gradient(180deg, rgba(120,200,230,0.15) 0%, rgba(74,156,214,0.08) 100%);
+
+  /* ─── Borders ───────────────────────────────────────────────── */
+  --ft-border-default: rgba(44, 112, 150, 0.14);
+  --ft-border-hover: rgba(44, 112, 150, 0.28);
+  --ft-border-active: rgba(63, 185, 255, 0.5);
+  --ft-border-focus: rgba(63, 185, 255, 0.7);
+
+  /* ─── Buttons ───────────────────────────────────────────────── */
+  --ft-btn-primary-bg: linear-gradient(180deg, #4fc3f7 0%, #2196f3 45%, #1976d2 100%);
+  --ft-btn-primary-hover: linear-gradient(180deg, #29b6f6 0%, #1e88e5 45%, #1565c0 100%);
+  --ft-btn-primary-text: #ffffff;
+  --ft-btn-primary-shadow: 0 1px 3px rgba(33,150,243,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+
+  --ft-btn-secondary-bg: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 45%, #dee2e6 100%);
+  --ft-btn-secondary-hover: linear-gradient(180deg, #e9ecef 0%, #dee2e6 45%, #ced4da 100%);
+  --ft-btn-secondary-text: #11324a;
+  --ft-btn-secondary-shadow: 0 1px 2px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+
+  /* ─── Tabs ──────────────────────────────────────────────────── */
+  --ft-tab-active-bg: linear-gradient(180deg, rgba(63,185,255,0.08) 0%, rgba(63,185,255,0.04) 100%);
+  --ft-tab-active-border-top: 2px solid #3fb9ff;
+
+  /* ─── Highlight / Selection ─────────────────────────────────── */
+  --ft-highlight-bg: rgba(255, 211, 107, 0.25);
+  --ft-selection-bg: rgba(63, 185, 255, 0.2);
+
+  /* ─── Scrollbar ─────────────────────────────────────────────── */
+  --ft-scrollbar-thumb: rgba(44, 112, 150, 0.2);
+  --ft-scrollbar-thumb-hover: rgba(44, 112, 150, 0.35);
+  --ft-scrollbar-track: transparent;
+
+  /* ─── Effects ───────────────────────────────────────────────── */
+  --ft-glow-accent: 0 0 20px rgba(63, 185, 255, 0.18);
+  --ft-glow-success: 0 0 12px rgba(75, 201, 138, 0.22);
+  --ft-glow-error: 0 0 12px rgba(255, 108, 122, 0.22);
+
+  /* ─── Legacy shadow aliases (used in OnboardingWizard) ──────── */
+  --ft-shadow-lg: var(--ft-shadow-medium);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Dark Theme — Harmonious Frutiger Aero dark equivalents
+   ═══════════════════════════════════════════════════════════════════ */
+[data-theme="frutiger-dark"] {
+  /* ─── Plan token overrides for dark ─────────────────────────── */
+  --ft-shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.30);
+  --ft-shadow-medium: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --ft-shadow-focus: 0 0 0 3px rgba(92, 196, 255, 0.30);
+  --ft-shadow-inset-gloss: inset 0 1px 0 rgba(255,255,255,0.06);
+  --ft-material-border-glass: 1px solid rgba(255,255,255,0.08);
+
+  /* ─── Color tokens (dark equivalents) ───────────────────────── */
+  --ft-color-bg-app: #0c1b2d;
+  --ft-color-bg-workspace: #111f33;
+  --ft-color-bg-panel: rgba(18, 32, 52, 0.80);
+  --ft-color-bg-panel-strong: rgba(24, 40, 64, 0.90);
+
+  --ft-color-text-primary: #dceaf7;
+  --ft-color-text-secondary: #8aa9c2;
+  --ft-color-text-muted: #5a7e99;
+  --ft-color-text-inverse: #0c1b2d;
+
+  --ft-color-accent-blue: #5cc4ff;
+  --ft-color-accent-cyan: #72e8ed;
+  --ft-color-accent-green: #7cf0c0;
+  --ft-color-accent-gold: #ffdc85;
+
+  --ft-color-status-success: #5dd9a0;
+  --ft-color-status-warning: #ffc870;
+  --ft-color-status-danger: #ff848e;
+  --ft-color-status-info: #6bb8ff;
+
+  /* ─── Backward-compat aliases (dark overrides) ──────────────── */
+  /* Mapped aliases (--ft-bg-base etc.) auto-follow via var().    */
+  /* Only non-mapped tokens need explicit dark values here.       */
+
+  --ft-bg-glass-active: rgba(30, 48, 72, 0.94);
+  --ft-bg-input: #0c1b2d;
+
+  --ft-text-link: #5cc4ff;
+
+  --ft-accent-primary-hover: #4db8ff;
+  --ft-accent-primary-active: #3aadf5;
+
+  /* ─── Gradients (dark) ──────────────────────────────────────── */
+  --ft-bg-gradient-sky: linear-gradient(180deg, #1a3a5c 0%, #0d2137 40%, #091620 100%);
+  --ft-bg-gradient-accent: linear-gradient(135deg, #1e5a8a 0%, #1976d2 50%, #1565c0 100%);
+  --ft-bg-gradient-header: linear-gradient(180deg, rgba(20,60,100,0.3) 0%, rgba(12,27,45,0.1) 100%);
+
+  /* ─── Borders (dark) ────────────────────────────────────────── */
+  --ft-border-default: rgba(92, 150, 200, 0.14);
+  --ft-border-hover: rgba(92, 150, 200, 0.28);
+  --ft-border-active: rgba(92, 196, 255, 0.5);
+  --ft-border-focus: rgba(92, 196, 255, 0.7);
+
+  /* ─── Buttons (dark) ────────────────────────────────────────── */
+  --ft-btn-primary-bg: linear-gradient(180deg, #2d5f8a 0%, #1e4f7a 45%, #163f6a 100%);
+  --ft-btn-primary-hover: linear-gradient(180deg, #388bfd 0%, #2d7bc9 45%, #1e5fa0 100%);
+  --ft-btn-primary-shadow: 0 1px 3px rgba(56,139,253,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+
+  --ft-btn-secondary-bg: linear-gradient(180deg, #21262d 0%, #1c2128 45%, #161b22 100%);
+  --ft-btn-secondary-hover: linear-gradient(180deg, #30363d 0%, #21262d 45%, #1c2128 100%);
+  --ft-btn-secondary-text: #dceaf7;
+  --ft-btn-secondary-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+
+  /* ─── Tabs (dark) ───────────────────────────────────────────── */
+  --ft-tab-active-bg: linear-gradient(180deg, rgba(92,196,255,0.08) 0%, rgba(30,79,122,0.04) 100%);
+  --ft-tab-active-border-top: 2px solid #5cc4ff;
+
+  /* ─── Highlight / Selection (dark) ──────────────────────────── */
+  --ft-highlight-bg: rgba(255, 220, 133, 0.15);
+  --ft-selection-bg: rgba(92, 196, 255, 0.25);
+
+  /* ─── Scrollbar (dark) ──────────────────────────────────────── */
+  --ft-scrollbar-thumb: rgba(92, 150, 200, 0.2);
+  --ft-scrollbar-thumb-hover: rgba(92, 150, 200, 0.35);
+
+  /* ─── Effects (dark) ────────────────────────────────────────── */
+  --ft-glow-accent: 0 0 20px rgba(92, 196, 255, 0.15);
+  --ft-glow-success: 0 0 12px rgba(93, 217, 160, 0.18);
+  --ft-glow-error: 0 0 12px rgba(255, 132, 142, 0.18);
+
+  /* ─── Legacy shadow aliases (dark) ──────────────────────────── */
+  --ft-shadow-lg: var(--ft-shadow-medium);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   Usage Rules
+   ═══════════════════════════════════════════════════════════════════
+
+   • Never stack more than two shadow treatments on one element.
+   • Use the strongest gloss treatment (--ft-shadow-inset-gloss)
+     only on top-level surfaces and active tabs.
+   • Keep destructive controls less glossy and more explicit
+     (rely on --ft-color-status-danger, not sheen).
+
+   ═══════════════════════════════════════════════════════════════════ */

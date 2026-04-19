@@ -1,0 +1,43 @@
+name: Feature Request
+description: Propose a new feature for FeverThoth IDE
+labels: [type:feature]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What the feature does and why it matters.
+    validations:
+      required: true
+  - type: textarea
+    id: user-value
+    attributes:
+      label: User Value
+      description: Who benefits and how?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Concrete conditions that define "done".
+      placeholder: |
+        - [ ] Given X, when Y, then Z
+        - [ ] Feature works with local Ollama
+        - [ ] No data leaves the machine without permission
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Other features, libraries, or changes this depends on.
+    validations:
+      required: false
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risk Notes
+      description: Potential issues, security concerns, or performance implications.
+    validations:
+      required: false

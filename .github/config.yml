@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/FeverDream/FeverThoth/tree/main/docs
+    about: Read the project documentation before opening an issue.
+  - name: Security Vulnerability
+    url: https://github.com/FeverDream/FeverThoth/security/advisories/new
+    about: Report security vulnerabilities privately through GitHub Security Advisories.

@@ -1,0 +1,57 @@
+.file-tree {
+  user-select: none;
+}
+
+.file-tree-section-header {
+  display: flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 var(--ft-space-lg);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ft-text-secondary);
+}
+
+.file-tree-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-xs);
+  height: 22px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--ft-text-primary);
+  transition: background var(--ft-transition-fast);
+}
+
+.file-tree-entry:hover {
+  background: var(--ft-bg-glass-hover);
+}
+
+.file-tree-entry .ft-icon-folder {
+  color: #dcb67a;
+  flex-shrink: 0;
+}
+
+.file-tree-entry .ft-icon-file {
+  color: var(--ft-text-tertiary);
+  flex-shrink: 0;
+}
+
+.file-tree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-tree-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ft-space-lg);
+  padding: var(--ft-space-2xl);
+  color: var(--ft-text-tertiary);
+  text-align: center;
+}

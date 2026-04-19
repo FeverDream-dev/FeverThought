@@ -1,0 +1,77 @@
+.bottom-panel {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  border-top: 1px solid var(--ft-border-default);
+  background: var(--ft-bg-surface);
+  flex-shrink: 0;
+}
+
+.panel-tabs {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  background: var(--ft-bg-base);
+  border-bottom: 1px solid var(--ft-border-default);
+  padding: 0 var(--ft-space-sm);
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.panel-tab {
+  height: 100%;
+  padding: 0 var(--ft-space-lg);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ft-text-tertiary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--ft-transition-fast);
+  position: relative;
+}
+
+.panel-tab:hover {
+  color: var(--ft-text-secondary);
+}
+
+.panel-tab.active {
+  color: var(--ft-text-primary);
+  border-bottom: 2px solid var(--ft-accent-primary);
+}
+
+.panel-close {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--ft-radius-xs);
+  color: var(--ft-text-tertiary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.panel-close:hover {
+  background: var(--ft-bg-glass-hover);
+  color: var(--ft-text-primary);
+}
+
+.panel-content {
+  flex: 1;
+  overflow: auto;
+}
+
+.terminal-placeholder,
+.problems-placeholder,
+.output-placeholder {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-sm);
+  padding: var(--ft-space-lg);
+  color: var(--ft-text-tertiary);
+  font-size: 12px;
+  height: 100%;
+}

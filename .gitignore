@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+target/
+
+# Build outputs
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Tauri
+apps/desktop/src-tauri/target/
+
+# Turbo
+.turbo/
+
+# Logs
+*.log
+
+# Plan pack (internal specs, not source)
+feverthoth_plan_pack/
+
+# Sisyphus internal
+.sisyphus/
+
+# macOS resource forks
+**/__MACOSX/
+**/._*
+._*

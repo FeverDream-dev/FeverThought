@@ -1,0 +1,124 @@
+.command-palette-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ft-z-modal);
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  padding-top: 15vh;
+  animation: ft-fade-in 100ms ease-out;
+}
+
+@keyframes ft-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.command-palette {
+  width: 560px;
+  max-height: 420px;
+  background: var(--ft-bg-surface);
+  border: 1px solid var(--ft-border-default);
+  border-radius: var(--ft-radius-lg);
+  box-shadow: var(--ft-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: ft-slide-in 150ms ease-out;
+}
+
+.command-palette-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-sm);
+  padding: var(--ft-space-md);
+  border-bottom: 1px solid var(--ft-border-default);
+}
+
+.command-palette-search-icon {
+  color: var(--ft-text-tertiary);
+  flex-shrink: 0;
+}
+
+.command-palette-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  padding: 0;
+  outline: none;
+  color: var(--ft-text-primary);
+}
+
+.command-palette-input:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.command-palette-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ft-space-xs) 0;
+}
+
+.command-palette-empty {
+  padding: var(--ft-space-xl);
+  text-align: center;
+  color: var(--ft-text-tertiary);
+  font-size: 13px;
+}
+
+.command-palette-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ft-space-sm);
+  width: 100%;
+  padding: var(--ft-space-sm) var(--ft-space-lg);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--ft-transition-fast);
+  color: var(--ft-text-primary);
+  font-size: 13px;
+}
+
+.command-palette-item:hover,
+.command-palette-item.selected {
+  background: var(--ft-tab-active-bg);
+}
+
+.command-palette-item-icon {
+  color: var(--ft-text-tertiary);
+  flex-shrink: 0;
+}
+
+.command-palette-item-label {
+  flex: 1;
+}
+
+.command-palette-item-category {
+  font-size: 10px;
+  color: var(--ft-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.command-palette-shortcut {
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--ft-bg-base);
+  border: 1px solid var(--ft-border-default);
+  border-radius: var(--ft-radius-xs);
+  color: var(--ft-text-secondary);
+  font-family: var(--ft-font-mono);
+}
+
+.command-palette-footer {
+  display: flex;
+  gap: var(--ft-space-lg);
+  padding: var(--ft-space-sm) var(--ft-space-lg);
+  border-top: 1px solid var(--ft-border-default);
+  font-size: 10px;
+  color: var(--ft-text-tertiary);
+}

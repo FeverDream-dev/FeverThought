@@ -1,0 +1,18 @@
+.editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--ft-bg-surface);
+  min-height: 0;
+}
+
+.editor-content {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.editor-content > div {
+  height: 100%;
+}
