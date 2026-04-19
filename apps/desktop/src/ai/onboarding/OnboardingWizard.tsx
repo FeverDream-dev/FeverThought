@@ -40,17 +40,7 @@ export function OnboardingWizard({ onComplete }: OnboardingWizardProps) {
         {step === "welcome" && (
           <div className="onboarding-step">
             <div className="onboarding-logo">
-              <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
-                <defs>
-                  <linearGradient id="ob-grad" x1="0" y1="0" x2="80" y2="80">
-                    <stop stopColor="#4fc3f7" />
-                    <stop offset="0.5" stopColor="#2196f3" />
-                    <stop offset="1" stopColor="#1976d2" />
-                  </linearGradient>
-                </defs>
-                <circle cx="40" cy="40" r="36" fill="url(#ob-grad)" />
-                <text x="40" y="48" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">FT</text>
-              </svg>
+              <img src="/icons/vista/app-icon.png" alt="FeverThoth" width={64} height={64} />
             </div>
             <h1>Welcome to FeverThoth IDE</h1>
             <p className="onboarding-subtitle">

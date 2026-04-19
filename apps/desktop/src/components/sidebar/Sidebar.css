@@ -26,6 +26,12 @@
   color: var(--ft-text-secondary);
 }
 
+.sidebar-header-icon {
+  image-rendering: auto;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 1px rgba(63, 185, 255, 0.2));
+}
+
 .sidebar-content {
   flex: 1;
   overflow-y: auto;

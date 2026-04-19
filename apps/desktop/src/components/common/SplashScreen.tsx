@@ -44,17 +44,7 @@ export function SplashScreen({ onFinished, minimumDuration = 1800 }: SplashScree
       <div className="splash-bg" />
       <div className="splash-content">
         <div className="splash-logo">
-          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-            <defs>
-              <linearGradient id="splash-grad" x1="0" y1="0" x2="80" y2="80">
-                <stop stopColor="#4fc3f7" />
-                <stop offset="0.5" stopColor="#2196f3" />
-                <stop offset="1" stopColor="#1976d2" />
-              </linearGradient>
-            </defs>
-            <circle cx="40" cy="40" r="36" fill="url(#splash-grad)" />
-            <text x="40" y="48" textAnchor="middle" fill="white" fontSize="28" fontWeight="bold">FT</text>
-          </svg>
+          <img src="/icons/vista/app-icon.png" alt="FeverThoth" width={80} height={80} />
         </div>
         <h1 className="splash-title">FeverThoth IDE</h1>
         <p className="splash-subtitle">AI-first coding environment</p>

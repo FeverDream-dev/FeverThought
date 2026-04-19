@@ -1,9 +1,7 @@
 import {
-  FolderOpen,
   Search,
   GitBranch,
   Sparkles,
-  Settings,
   Bug,
   Terminal,
   LayoutGrid,
@@ -16,7 +14,7 @@ interface ActivityBarProps {
 }
 
 const ACTIVITY_ITEMS = [
-  { id: "explorer", icon: FolderOpen, label: "Explorer" },
+  { id: "explorer", iconSrc: "/icons/vista/folder-closed.png", label: "Explorer" },
   { id: "search", icon: Search, label: "Search" },
   { id: "git", icon: GitBranch, label: "Source Control" },
   { id: "ai", icon: Sparkles, label: "AI Assistant" },
@@ -28,14 +26,18 @@ export function ActivityBar({ activePanel, onPanelChange }: ActivityBarProps) {
   return (
     <div className="activity-bar">
       <div className="activity-bar-top">
-        {ACTIVITY_ITEMS.map(({ id, icon: Icon, label }) => (
+        {ACTIVITY_ITEMS.map(({ id, icon: Icon, iconSrc, label }) => (
           <button
             key={id}
             className={`activity-bar-item ${activePanel === id ? "active" : ""}`}
             onClick={() => onPanelChange(activePanel === id ? "" : id)}
             title={label}
           >
-            <Icon size={22} strokeWidth={1.5} />
+            {iconSrc ? (
+              <img src={iconSrc} alt={label} width={22} height={22} className="activity-bar-icon-img" />
+            ) : Icon ? (
+              <Icon size={22} strokeWidth={1.5} />
+            ) : null}
           </button>
         ))}
       </div>
@@ -44,7 +46,7 @@ export function ActivityBar({ activePanel, onPanelChange }: ActivityBarProps) {
           className="activity-bar-item"
           title="Settings"
         >
-          <Settings size={22} strokeWidth={1.5} />
+          <img src="/icons/vista/settings.png" alt="Settings" width={20} height={20} className="activity-bar-icon-img" />
         </button>
         <button
           className="activity-bar-item"

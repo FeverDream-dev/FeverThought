@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useAppStore } from "../../stores/appStore";
-import { ChevronRight, ChevronDown, File, Folder, FolderOpen } from "lucide-react";
+import { ChevronRight, ChevronDown } from "lucide-react";
 import { invoke } from "@tauri-apps/api/core";
 import "./FileTree.css";
 
@@ -52,9 +52,9 @@ export function FileTree() {
           >
             {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             {isExpanded ? (
-              <FolderOpen size={14} className="ft-icon-folder" />
+              <img src="/icons/vista/folder-open.png" alt="" width={14} height={14} className="ft-icon-folder-img" />
             ) : (
-              <Folder size={14} className="ft-icon-folder" />
+              <img src="/icons/vista/folder-closed.png" alt="" width={14} height={14} className="ft-icon-folder-img" />
             )}
             <span className="file-tree-name">{entry.name}</span>
           </div>
@@ -69,7 +69,7 @@ export function FileTree() {
         style={{ paddingLeft: `${depth * 16 + 24}px` }}
         onClick={() => openFile(entry.path)}
       >
-        <File size={14} className="ft-icon-file" />
+        <img src="/icons/vista/file-text.png" alt="" width={14} height={14} className="ft-icon-file-img" />
         <span className="file-tree-name">{entry.name}</span>
       </div>
     );

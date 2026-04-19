@@ -287,6 +287,23 @@ function AiChatView({
                 </div>
               )}
             </div>
+
+            {msg.role === "assistant" && (
+              <div className="ai-message-reactions">
+                <button className="ai-reaction-btn" title="Like">
+                  <img src="/icons/msn/thumbsup.png" alt="Like" width={16} height={16} />
+                </button>
+                <button className="ai-reaction-btn" title="Helpful">
+                  <img src="/icons/msn/star.png" alt="Star" width={16} height={16} />
+                </button>
+                <button className="ai-reaction-btn" title="Funny">
+                  <img src="/icons/msn/smile.png" alt="Smile" width={16} height={16} />
+                </button>
+                <button className="ai-reaction-btn" title="Confused">
+                  <img src="/icons/msn/thinking.png" alt="Thinking" width={16} height={16} />
+                </button>
+              </div>
+            )}
           </div>
         ))}
         <div ref={messagesEndRef} />

@@ -1095,6 +1095,43 @@
   to { transform: rotate(360deg); }
 }
 
+/* AI Message Reactions (MSN-style) */
+
+.ai-message-reactions {
+  display: flex;
+  gap: var(--ft-space-xs);
+  padding-left: 32px;
+  margin-top: var(--ft-space-xs);
+}
+
+.ai-reaction-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--ft-radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--ft-transition-fast);
+  padding: 0;
+}
+
+.ai-reaction-btn:hover {
+  background: var(--ft-bg-glass-hover);
+  border-color: var(--ft-border-default);
+  transform: scale(1.15);
+}
+
+/* File tree Vista icon styles */
+
+.ft-icon-folder-img,
+.ft-icon-file-img {
+  image-rendering: auto;
+  flex-shrink: 0;
+}
+
 /* Provider wizard */
 
 .provider-wizard-overlay {

@@ -13,6 +13,9 @@ export function Sidebar({ activePanel }: SidebarProps) {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
+        {activePanel === "explorer" && (
+          <img src="/icons/wii/home.png" alt="" width={14} height={14} className="sidebar-header-icon" />
+        )}
         <h2 className="sidebar-title">
           {activePanel === "explorer" && "Explorer"}
           {activePanel === "search" && "Search"}

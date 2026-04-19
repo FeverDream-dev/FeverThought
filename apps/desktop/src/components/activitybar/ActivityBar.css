@@ -52,3 +52,13 @@
   background: var(--ft-accent-primary);
   border-radius: 0 1px 1px 0;
 }
+
+.activity-bar-icon-img {
+  image-rendering: auto;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+  transition: filter var(--ft-transition-fast);
+}
+
+.activity-bar-item.active .activity-bar-icon-img {
+  filter: drop-shadow(0 1px 3px rgba(63, 185, 255, 0.4));
+}

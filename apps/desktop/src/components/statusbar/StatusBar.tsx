@@ -1,4 +1,4 @@
-import { GitBranch, AlertTriangle, Info, Wifi, WifiOff } from "lucide-react";
+import { AlertTriangle, Info, Wifi, WifiOff } from "lucide-react";
 import { useAppStore } from "../../stores/appStore";
 import "./StatusBar.css";
 
@@ -9,7 +9,7 @@ export function StatusBar() {
     <div className="statusbar">
       <div className="statusbar-left">
         <div className="statusbar-item">
-          <GitBranch size={12} />
+          <img src="/icons/vista/folder-blue.png" alt="" width={12} height={12} />
           <span>main</span>
         </div>
         <div className="statusbar-item">
@@ -29,6 +29,7 @@ export function StatusBar() {
           <span>{isOllamaRunning ? "AI Ready" : "AI Offline"}</span>
         </div>
         <div className="statusbar-item">
+          <img src="/icons/msn/neutral.png" alt="" width={12} height={12} />
           <span>Ln 1, Col 1</span>
         </div>
         <div className="statusbar-item">
