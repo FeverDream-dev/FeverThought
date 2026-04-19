@@ -22,9 +22,9 @@ export type {
   ScreenshotAnalysis,
   CommandEntry,
   CommandCategory,
-} from "../../../packages/shared-types/src/index";
+} from "@feverthoth/shared-types";
 
-export { Permission } from "../../../packages/shared-types/src/index";
+export { Permission } from "@feverthoth/shared-types";
 
 import type {
   ProviderProfile,
@@ -34,7 +34,7 @@ import type {
   SettingsSection,
   DiffEntry,
   McpServerStatus,
-} from "../../../packages/shared-types/src/index";
+} from "@feverthoth/shared-types";
 
 // ── File & Tab types ───────────────────────────────────────
 

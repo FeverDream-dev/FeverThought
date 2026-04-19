@@ -1,6 +1,5 @@
 import Editor from "@monaco-editor/react";
 import { useRef } from "react";
-import { useAppStore } from "../../stores/appStore";
 
 interface MonacoWrapperProps {
   path: string;

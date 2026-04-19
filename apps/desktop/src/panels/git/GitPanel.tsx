@@ -1,4 +1,4 @@
-import { GitBranch, GitCommit, RefreshCw } from "lucide-react";
+import { GitBranch, RefreshCw } from "lucide-react";
 
 export function GitPanel() {
   return (

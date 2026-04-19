@@ -101,7 +101,6 @@ export function AiPanel() {
           <AiChatView
             messages={chatMessages}
             messagesEndRef={messagesEndRef}
-            isOllamaRunning={isOllamaRunning}
             showClarification={showClarification}
             setShowClarification={setShowClarification}
           />
@@ -157,7 +156,7 @@ function AiChatView({
   showClarification: boolean;
   setShowClarification: (v: boolean) => void;
 }) {
-  const [input, setInput] = useState("");
+  const [, setInput] = useState("");
 
   return (
     <>
@@ -341,7 +340,7 @@ function AiPlanView() {
         <span>Files: {activeSession.plan.estimatedFiles}</span>
       </div>
       <div className="ai-plan-steps-list">
-        {activeSession.plan.steps.map((step) => (
+        {activeSession.plan.steps.map((step: { id: string; description: string; filePaths: string[]; riskTier: string; permission: unknown; status: string }) => (
           <div key={step.id} className={`ai-plan-step ai-plan-step--${step.status}`}>
             <span className="ai-plan-step-status">
               {step.status === "completed" && <CheckCircle size={12} />}
@@ -380,7 +379,7 @@ function AiActionsView() {
 
   return (
     <div className="ai-actions-view">
-      {activeSession.actions.map((action) => (
+      {activeSession.actions.map((action: { id: string; type: string; description: string; status: string; toolName?: string }) => (
         <div key={action.id} className={`ai-action-card ai-action--${action.status}`}>
           <div className="ai-action-header">
             <span className="ai-action-type">{action.type.replace(/_/g, " ")}</span>
@@ -473,7 +472,7 @@ function AiMemoryView() {
         <div className="ai-memory-section">
           <h4>Assumptions</h4>
           <ul>
-            {activeSession.assumptions.map((a, i) => (
+            {activeSession.assumptions.map((a: string, i: number) => (
               <li key={i}>{a}</li>
             ))}
           </ul>

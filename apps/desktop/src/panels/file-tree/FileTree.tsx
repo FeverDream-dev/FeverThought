@@ -12,7 +12,7 @@ interface FileTreeEntry {
 }
 
 export function FileTree() {
-  const { workspace, openFile, refreshFileTree } = useAppStore();
+  const { workspace, openFile } = useAppStore();
   const [tree, setTree] = useState<FileTreeEntry[]>([]);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 

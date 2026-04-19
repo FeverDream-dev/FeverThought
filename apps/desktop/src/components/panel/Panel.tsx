@@ -1,4 +1,4 @@
-import { Terminal as TerminalPanel, Search, X } from "lucide-react";
+import { Terminal as TerminalPanel, X } from "lucide-react";
 import "./Panel.css";
 
 interface PanelProps {

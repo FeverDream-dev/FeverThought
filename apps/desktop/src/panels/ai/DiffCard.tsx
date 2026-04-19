@@ -68,7 +68,7 @@ export function DiffCard({ diff, onAccept, onReject }: DiffCardProps) {
 
       {expanded && (
         <div className="diff-card-hunks">
-          {diff.hunks.map((hunk, i) => (
+          {diff.hunks.map((hunk: { oldStart: number; oldLines: number; newStart: number; newLines: number; content: string }, i: number) => (
             <div key={i} className="diff-hunk">
               <div className="diff-hunk-header">
                 @@ -{hunk.oldStart},{hunk.oldLines} +{hunk.newStart},{hunk.newLines} @@

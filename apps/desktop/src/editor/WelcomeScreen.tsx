@@ -1,5 +1,5 @@
 import { open } from "@tauri-apps/plugin-dialog";
-import { useAppStore } from "../../stores/appStore";
+import { useAppStore } from "../stores/appStore";
 import { FolderOpen, Sparkles, Keyboard } from "lucide-react";
 
 export function WelcomeScreen() {

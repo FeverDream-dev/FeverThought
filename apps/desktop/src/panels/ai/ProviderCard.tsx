@@ -81,7 +81,7 @@ export function ProviderCard({
 
       {profile.capabilityFlags.length > 0 && (
         <div className="provider-card-capabilities">
-          {profile.capabilityFlags.map((flag) => (
+          {profile.capabilityFlags.map((flag: string) => (
             <span key={flag} className="provider-card-cap">{flag}</span>
           ))}
         </div>
