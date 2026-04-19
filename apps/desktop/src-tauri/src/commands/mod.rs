@@ -1,4 +1,4 @@
-use feverthoth_core::app_info;
+use feverthoth_core::app_info as get_app_info;
 use feverthoth_core::state::AppState;
 use tauri::State;
 
@@ -9,7 +9,7 @@ pub fn greet(name: &str) -> String {
 
 #[tauri::command]
 pub fn app_info() -> feverthoth_core::AppInfo {
-    app_info()
+    get_app_info()
 }
 
 #[tauri::command]
