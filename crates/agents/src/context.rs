@@ -178,7 +178,7 @@ impl ContextAssembler {
         }
 
         // Sort by priority (descending) and estimate tokens
-        all_sources.sort_by(|a, b| b.priority.cmp(&a.priority));
+        all_sources.sort_by_key(|b| std::cmp::Reverse(b.priority));
 
         // Simple token estimation: ~4 chars per token
         let estimated_tokens: usize = all_sources.iter().map(|s| s.content.len() / 4).sum();
